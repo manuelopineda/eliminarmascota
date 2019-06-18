@@ -28,7 +28,7 @@ public class Main02 {
         
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         
-        lista = mascotadao.listarMascotas(sesion);
+        lista = mascotadao.listarMascotas();
         
         for(Mascota mascota : lista){
             System.out.println("Nombre de la Mascota : "+mascota.getNombreMascota());

@@ -17,10 +17,11 @@ import org.hibernate.Session;
 public interface IMascota {
     
     public abstract void guardarMascota(Mascota mascota);
-    public abstract ArrayList<Mascota> listarMascotas(Session sesion);
-    public abstract void actualizarMascota(Session sesion,Mascota mascota);
+    public abstract ArrayList<Mascota> listarMascotas();
+    public abstract void actualizarMascota(Mascota mascota);
     public abstract List<Mascota> ListarRazaMascotas(Session sesion, String razaMascota)throws Exception;
     public abstract List<Mascota> listarxNombreMascota(Session session, String nombreMascota);
     public abstract Integer contarMascotas(Session sesion)throws Exception;
+    public abstract boolean eliminarMascota(Mascota mascota);
     
 }

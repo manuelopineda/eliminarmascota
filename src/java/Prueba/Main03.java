@@ -28,7 +28,7 @@ public class Main03 {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
 
         Mascota mimascota = new Mascota(2, "Luna", "Paty", "Pitbull");
-        mascotadao.actualizarMascota(sesion, mimascota);
+        mascotadao.actualizarMascota(mimascota);
       
 
     }

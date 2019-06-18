@@ -18,59 +18,60 @@ import org.hibernate.Transaction;
  *
  * @author YEFERSON
  */
-public class MascotaDao implements IMascota{
+public class MascotaDao implements IMascota {
 
     @Override
     public void guardarMascota(Mascota mascota) {
-        
+
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = sesion.beginTransaction();
-        
+
         sesion.save(mascota);
         transaction.commit();
         sesion.close();
     }
-    
+
     @Override
-    public ArrayList<Mascota> listarMascotas(Session sesion) {
+    public ArrayList<Mascota> listarMascotas() {
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
         ArrayList<Mascota> milista = new ArrayList<>();
         //Crear la consulta hacia la base de datos
         Query query = sesion.createQuery("FROM Mascota");
-        
+
         //Ejecutar la consulta y obtener la lista
-        milista = (ArrayList<Mascota>)query.list();
-        
+        milista = (ArrayList<Mascota>) query.list();
+
         return milista;
-    
+
     }
 
     @Override
-    public void actualizarMascota(Session sesion, Mascota mascota) {
+    public void actualizarMascota(Mascota mascota) {
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = sesion.beginTransaction();
         sesion.update(mascota);
         transaction.commit();
         sesion.close();
-        
+
     }
 
     @Override
-    public List<Mascota> ListarRazaMascotas(Session sesion, String razaMascota)throws Exception{
-       
-        String mascota = "from Mascota where Raza='"+razaMascota+"'";        
+    public List<Mascota> ListarRazaMascotas(Session sesion, String razaMascota) throws Exception {
+
+        String mascota = "from Mascota where Raza='" + razaMascota + "'";
         Query query = sesion.createQuery(mascota);
-        List< Mascota > lista= (List< Mascota >) query.list();
-	return lista;
+        List< Mascota> lista = (List< Mascota>) query.list();
+        return lista;
 
     }
 
-  
     //LISTAR POR NOMBRE
-     @Override
+    @Override
     public List<Mascota> listarxNombreMascota(Session session, String nombreMascota) {
-          String mascota = "from Mascota where nombreMascota='"+nombreMascota+"'";        
+        String mascota = "from Mascota where nombreMascota='" + nombreMascota + "'";
         Query query = session.createQuery(mascota);
-        List< Mascota > lista= (List< Mascota >) query.list();
-	return lista;
+        List< Mascota> lista = (List< Mascota>) query.list();
+        return lista;
     }
 
     @Override
@@ -78,14 +79,32 @@ public class MascotaDao implements IMascota{
 
         String hql = "select count(*) from Mascota";
         Query query = sesion.createQuery(hql);
-        Long FilasTab=(Long) query.uniqueResult();
-        Integer cont=FilasTab.intValue();
+        Long FilasTab = (Long) query.uniqueResult();
+        Integer cont = FilasTab.intValue();
         return cont;
 
-        
     }
 
-   
+    @Override
+    public boolean eliminarMascota(Mascota mascota) {
+        Session session = null;
+        boolean resp = true;
+        try {
 
-   
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.delete(mascota);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Se elimino :" + e);
+            resp = false;
+            session.getTransaction().rollback();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+           
+        }
+         return resp;
+    }
 }
